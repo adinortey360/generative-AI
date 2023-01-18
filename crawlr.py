@@ -37,6 +37,8 @@ class RecursiveSpider(scrapy.Spider):
         'https://thejohnfox.com/2021/08/65-long-sentences-in-literature/',
         'https://learnenglish.britishcouncil.org/'
     ]
+    sentence_count = 0
+    max_sentences = 100000 # change this to the desired number of sentences
     scraped_data = []
 
     def parse(self, response):
@@ -44,8 +46,13 @@ class RecursiveSpider(scrapy.Spider):
             yield response.follow(link, self.parse)
 
         for sentence in response.css('p::text').getall():
+            self.sentence_count += 1
             self.scraped_data.append(sentence)
-    
+            if self.sentence_count % 1000 == 0: # show progress every 1000 sentences
+                print(f'Scraped {self.sentence_count} sentences so far')
+            if self.sentence_count >= self.max_sentences:
+                raise CloseSpider('Reached maximum sentence count')
+
     def closed(self, reason):
         with open('scraped_data.txt', 'w') as f:
             for sentence in self.scraped_data:
