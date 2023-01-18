@@ -1,10 +1,16 @@
 import random
 
-# Dummy data
-raw_data = ["This is a sample text.",
-            "Another sample text for preprocessing.",
-            "Here is some more text for you.",
-            "And one more text for good measure."]
+# Create an empty list to store the sentences
+raw_data = []
+
+# Open the text file containing the sentences
+with open("scraped_sentences.txt", "r") as f:
+    # Iterate over the lines in the file
+    for line in f:
+        # Strip the line of leading and trailing whitespace
+        line = line.strip()
+        # Append the sentence to the list
+        raw_data.append(line)
 
 # Preprocessing
 processed_data = [text.lower().split() for text in raw_data]
@@ -63,5 +69,5 @@ for i in range(len(mc.words) - 1):
         mc.word_freq[current_word] = [next_word]
 
 # Generating new text
-generated_text = mc.generate_text(user_input[-1], 10)
+generated_text = mc.generate_text(user_input[-1], 100)
 print(generated_text)
