@@ -1,42 +1,25 @@
 import scrapy
+import wikipedia
 
 class SentenceSpider(scrapy.Spider):
     name = "sentences"
     start_urls = [
         'https://en.wikipedia.org/wiki/Web_scraping',
-        'https://en.wikipedia.org/wiki/Main_Page',
-        'https://en.wikipedia.org/wiki/Python_(programming_language)',
-        'https://en.wikipedia.org/wiki/Scrapy',
-        'https://en.wikipedia.org/wiki/General-purpose_programming_language',
-        'https://en.wikipedia.org/wiki/Programming_language',
-        'https://en.wikipedia.org/wiki/Software',
-        'https://en.wikipedia.org/wiki/Software_development',
-        'https://en.wikipedia.org/wiki/Gribov',
-        'https://en.wikipedia.org/wiki/German_submarine_U-3507',
-        'https://en.wikipedia.org/wiki/United_States',
-        'https://en.wikipedia.org/wiki/United_States_Army',
-        'https://en.wikipedia.org/wiki/United_States_Army_Air_Force',
-        'https://en.wikipedia.org/wiki/United_States_Army_Air_Force_in_World_War_II',
-        'https://en.wikipedia.org/wiki/United_States_Army_Air_Force_in_World_War_II#Theater_of_operations',
-        'https://en.wikipedia.org/wiki/United_States_Army_Air_Force_in_World_War_II#Theater_of_operations',
-        'https://en.wikipedia.org/wiki/Aki_no_Arashi',
-        'https://en.wikipedia.org/wiki/Alaska',
-        'https://en.wikipedia.org/wiki/Alaska_Yukon_Pacific_Exposition',
-        'https://en.wikipedia.org/wiki/Alaska_Yukon_Pacific_Exposition#Exposition_buildings',
-        'https://en.wikipedia.org/wiki/Diadasia',
-        'https://en.wikipedia.org/wiki/Alaska_Yukon_Pacific_Exposition#Exposition_buildings',
-        'https://en.wikipedia.org/wiki/Diadasia',
-        'https://en.wikipedia.org/wiki/Opoczki',
-        'https://en.wikipedia.org/wiki/Bucculatrix_transversella',
-        'https://en.wikipedia.org/wiki/Ghana',
-        'https://en.wikipedia.org/wiki/Ghanaian_cedi',
-        'https://en.wikipedia.org/wiki/Kumasi',
-        'https://en.wikipedia.org/wiki/Ashanti_Empire',
-        'https://en.wikipedia.org/wiki/Gulf_of_Guinea',
-        'https://en.wikipedia.org/wiki/Cameroon',
-        'https://thejohnfox.com/2021/08/65-long-sentences-in-literature/',
-        'https://learnenglish.britishcouncil.org/'
     ]
+
+    count = 0
+    for i in range(20):
+        try:
+            page = wikipedia.random()
+            start_urls.append(wikipedia.page(page).url)
+
+            print(count)
+            print(wikipedia.page(page).url)
+            count += 1
+        except:
+            continue
+
+
     sentence_count = 0
     max_sentences = 500000 # change this to the desired number of sentences
     scraped_sentences = []

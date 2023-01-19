@@ -69,5 +69,5 @@ for i in range(len(mc.words) - 1):
         mc.word_freq[current_word] = [next_word]
 
 # Generating new text
-generated_text = mc.generate_text(user_input[-1], 100)
+generated_text = mc.generate_text(user_input[-1], 25)
 print(generated_text)
