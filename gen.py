@@ -1,73 +1,51 @@
 import random
 
-# Create an empty list to store the sentences
-raw_data = []
+# Open the dataset file
+with open("scraped_sentences.txt", "r") as file:
+    # Read the entire file into a single string
+    text = file.read()
 
-# Open the text file containing the sentences
-with open("scraped_sentences.txt", "r") as f:
-    # Iterate over the lines in the file
-    for line in f:
-        # Strip the line of leading and trailing whitespace
-        line = line.strip()
-        # Append the sentence to the list
-        raw_data.append(line)
+# Tokenize the text into a list of sentences
+sentences = text.split("\n")
 
-# Preprocessing
-processed_data = [text.lower().split() for text in raw_data]
+# Create a dictionary to store the Markov chain
+markov_chain = {}
 
-class MarkovChain:
+# Determine the order of the Markov chain
+order = 1
 
-    def __init__(self, data):
-        self.data = data
-        self.words = []
-        self.word_freq = {}
-        for sentence in self.data:
-            for word in sentence:
-                self.words.append(word)
-        for i in range(len(self.words) - 1):
-            current_word = self.words[i]
-            next_word = self.words[i+1]
-            if current_word in self.word_freq:
-                self.word_freq[current_word].append(next_word)
-            else:
-                self.word_freq[current_word] = [next_word]
+# Build the Markov chain
+for sentence in sentences:
+    # Tokenize the sentence into a list of words
+    words = sentence.split()
+    for i in range(len(words) - order):
+        # Get the current state (a tuple of the previous n-1 words)
+        state = tuple(words[i:i+order])
+        # Get the next word
+        next_word = words[i+order]
+        # If the state doesn't already exist in the dictionary, add it
+        if state not in markov_chain:
+            markov_chain[state] = []
+        # Add the next word to the list of possible words following the state
+        markov_chain[state].append(next_word)
 
-    def generate_text(self, seed, length):
-        current_word = seed
-        generated_text = current_word
-        for _ in range(length):
-            next_word = random.choice(self.word_freq[current_word])
-            generated_text += " " + next_word
-            current_word = next_word
-        return generated_text
+# Get user input
+user_input = input("User: ")
 
-# Creating an instance of MarkovChain with the training data
-mc = MarkovChain(processed_data)
+# Tokenize the user input
+user_input_words = user_input.split()
 
-# Getting user input
-user_input = input("Enter some text: ")
+# Get the last n-1 words of the user input
+current_state = tuple(user_input_words[-order:])
 
-# Tokenizing and preprocessing user input
-user_input = user_input.lower().split()
-
-# Adding user input to the training data
-processed_data.append(user_input)
-
-# Updating the MarkovChain model with the new data
-mc.data = processed_data
-mc.words = []
-mc.word_freq = {}
-for sentence in mc.data:
-    for word in sentence:
-        mc.words.append(word)
-for i in range(len(mc.words) - 1):
-    current_word = mc.words[i]
-    next_word = mc.words[i+1]
-    if current_word in mc.word_freq:
-        mc.word_freq[current_word].append(next_word)
+# Generate a response
+response = list(current_state)
+for i in range(10):
+    if current_state in markov_chain:
+        next_word = random.choice(markov_chain[current_state])
+        response.append(next_word)
+        current_state = tuple(response[-order:])
     else:
-        mc.word_freq[current_word] = [next_word]
+        break
 
-# Generating new text
-generated_text = mc.generate_text(user_input[-1], 25)
-print(generated_text)
+print("Bot: " + " ".join(response))
