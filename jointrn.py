@@ -1,11 +1,11 @@
 import os
 
-directory_path = 'TRN'
+directory_path = 'bbc'
 combined_file = 'combined_files.txt'
 
 with open(combined_file, 'w') as out_file:
     for file_name in os.listdir(directory_path):
-        if file_name.endswith(".trn"):
+        if file_name.endswith(".txt"):
             try:
                 with open(os.path.join(directory_path, file_name), 'r', encoding='latin-1') as in_file:
                     out_file.write(in_file.read())

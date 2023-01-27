@@ -3,7 +3,7 @@ import random
 
 def generate_sentence(start):
     # Read the text file and split it into a list of sentences
-    with open("scraped_data.txt", "r") as f:
+    with open("scraped_sentences.txt", "r") as f:
         text = f.read()
     sentences = text.split(".")
     
@@ -46,7 +46,8 @@ def generate_sentence(start):
     return sentence
 
 # Test the function with a starting sentence
-print(generate_sentence("I am"))
+given_text = input("Message: ")
+print(generate_sentence(given_text))
 
 
 
